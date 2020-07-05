@@ -1,0 +1,16 @@
+setwd("D:/exdata_data_household_power_consumption")
+data_all <- read.table("D:/exdata_data_household_power_consumption/household_power_consumption.txt", header = TRUE, sep = ";")
+data_all$Date <- as.Date(data_all$Date, format = "%d/%m/%Y")
+data = data_all[data_all$Date == "2007-02-01" | data_all$Date == "2007-02-02", ]
+data$Date_Time <- paste(data$Date, " ", data$Time)
+data$Date_Time <- strptime(data$Date_Time, format = "%Y-%m-%d %H:%M:%S")
+data$Sub_metering_1 <- as.numeric(as.character(data$Sub_metering_1))
+data$Sub_metering_2 <- as.numeric(as.character(data$Sub_metering_2))
+data$Sub_metering_3 <- as.numeric(as.character(data$Sub_metering_3))
+
+png(file = "plot3.png", width=480, height=480)
+plot(data$Date_Time, data$Sub_metering_1, type = "l", ylab = "Energy sub metering", xlab = "")
+lines(data$Date_Time, data$Sub_metering_2, col = "red")
+lines(data$Date_Time, data$Sub_metering_3, col = "blue")
+legend("topright", col = c("black","red","blue"), c("Sub_metering_1","Sub_metering_2", "Sub_metering_3"), lty=c(1,1), lwd=c(1,1))
+dev.off()
